@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>QGIS2leaf webmap</title>
+	<meta charset="utf-8" />
+	
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" /> <!-- we will us e this as the styling script for our webmap-->
+	<link rel="stylesheet" type="text/css" href="css/own_style.css">
+</head>
+<body>
+	<div id="map"></div> <!-- this is the initial look of the map. in most cases it is done externally using something like a map.css stylesheet were you can specify the look of map elements, like background color tables and so on.-->
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.js"></script> <!-- this is the javascript file that does the magic-->
+  
+		<script src='data\exp_portalsalongroute.js' ></script>
+		
+		<script src='data\exp_links.js' ></script>
+		
+		<script src='data\exp_portals.js' ></script>
+		
+	<script>
+		var map = L.map('map', { zoomControl:true }).fitBounds([[58.8221212924,5.39113877443],[58.9919693025,5.87172722557]]);
+		var additional_attrib = 'created w. <a href="https://github.com/geolicious/qgis2leaf" target ="_blank">gis2leaf</a> by <a href="http://www.geolicious.de" target ="_blank">Geolicious</a> & contributors<br>';
+	var feature_group = new L.featureGroup([]);
+	
+		map.attributionControl.addAttribution(additional_attrib + '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'); 
+		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+		
+			function pop_portalsalongroute(feature, layer) {
+				var popupContent = '<table><tr><th>attribute</th><th>value</th></tr><tr><td>name</td><td>' + feature.properties.name + '</td></tr><tr><td>link</td><td>' + feature.properties.link + '</td></tr><tr><td>y</td><td>' + feature.properties.y + '</td></tr><tr><td>x</td><td>' + feature.properties.x + '</td></tr></table>';
+				layer.bindPopup(popupContent);
+			}
+					
+			var exp_portalsalongrouteJSON = new L.geoJson(exp_portalsalongroute,{
+				onEachFeature: pop_portalsalongroute,
+				pointToLayer: function (feature, latlng) {  
+					return L.circleMarker(latlng, {
+						radius: feature.properties.radius_qgis2leaf,
+						fillColor: feature.properties.color_qgis2leaf,
+						color: '#000',
+						weight: 1,
+						opacity: feature.properties.transp_qgis2leaf,
+						fillOpacity: feature.properties.transp_fill_qgis2leaf
+						})
+					}
+				});
+			feature_group.addLayer(exp_portalsalongrouteJSON);
+			
+					//add comment sign to hide this layer on the map in the initial view.
+					exp_portalsalongrouteJSON.addTo(map);
+			function pop_links(feature, layer) {
+				var popupContent = '<table><tr><th>attribute</th><th>value</th></tr><tr><td>FID</td><td>' + feature.properties.FID + '</td></tr></table>';
+				layer.bindPopup(popupContent);
+			}
+					
+			var exp_linksJSON = new L.geoJson(exp_links,{
+				onEachFeature: pop_links,
+				style: function (feature) {
+					return {weight: feature.properties.radius_qgis2leaf,
+							color: feature.properties.color_qgis2leaf,
+							opacity: feature.properties.transp_qgis2leaf,
+							fillOpacity: feature.properties.transp_fill_qgis2leaf};
+					}
+				});
+			feature_group.addLayer(exp_linksJSON);
+			
+					//add comment sign to hide this layer on the map in the initial view.
+					exp_linksJSON.addTo(map);
+			function pop_portals(feature, layer) {
+				var popupContent = '<table><tr><th>attribute</th><th>value</th></tr><tr><td>portal_name</td><td>' + feature.properties.portal_name + '</td></tr><tr><td>link</td><td>' + feature.properties.link + '</td></tr><tr><td>type</td><td>' + feature.properties.type + '</td></tr><tr><td>who_sent_in</td><td>' + feature.properties.who_sent_in + '</td></tr><tr><td>x</td><td>' + feature.properties.x + '</td></tr><tr><td>y</td><td>' + feature.properties.y + '</td></tr><tr><td>expected_takedown_time</td><td>' + feature.properties.expected_takedown_time + '</td></tr></table>';
+				layer.bindPopup(popupContent);
+			}
+					
+			var exp_portalsJSON = new L.geoJson(exp_portals,{
+				onEachFeature: pop_portals,
+				pointToLayer: function (feature, latlng) {  
+					return L.circleMarker(latlng, {
+						radius: feature.properties.radius_qgis2leaf,
+						fillColor: feature.properties.color_qgis2leaf,
+						color: '#000',
+						weight: 1,
+						opacity: feature.properties.transp_qgis2leaf,
+						fillOpacity: feature.properties.transp_fill_qgis2leaf
+						})
+					}
+				});
+			feature_group.addLayer(exp_portalsJSON);
+			
+					//add comment sign to hide this layer on the map in the initial view.
+					exp_portalsJSON.addTo(map);
+	L.control.layers({},{"portalsalongroute": exp_portalsalongrouteJSON,"links": exp_linksJSON,"portals": exp_portalsJSON}).addTo(map);
+	</script>
+</body>
+</html>
+	
