@@ -19,7 +19,7 @@
 		<script src='data\exp_portals.js' ></script>
 		
 	<script>
-		var map = L.map('map', { zoomControl:true }).fitBounds([[58.8221212924,5.39113877443],[58.9919693025,5.87172722557]]);
+		var map = L.map('map', { zoomControl:true }).fitBounds([[58.8575099489,5.47919235297],[59.0162842645,5.98740235804]]);
 		var additional_attrib = 'created w. <a href="https://github.com/geolicious/qgis2leaf" target ="_blank">gis2leaf</a> by <a href="http://www.geolicious.de" target ="_blank">Geolicious</a> & contributors<br>';
 	var feature_group = new L.featureGroup([]);
 	
@@ -27,7 +27,7 @@
 		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 		
 			function pop_portalsalongroute(feature, layer) {
-				var popupContent = '<table><tr><th>attribute</th><th>value</th></tr><tr><td>name</td><td>' + feature.properties.name + '</td></tr><tr><td>link</td><td>' + feature.properties.link + '</td></tr><tr><td>y</td><td>' + feature.properties.y + '</td></tr><tr><td>x</td><td>' + feature.properties.x + '</td></tr></table>';
+				var popupContent = '<table><tr><th>attribute</th><th>value</th></tr><tr><td>name</td><td>' + feature.properties.name + '</td></tr><tr><td>link</td><td>' + feature.properties.link + '</td></tr><tr><td>y</td><td>' + feature.properties.y + '</td></tr><tr><td>x</td><td>' + feature.properties.x + '</td></tr><tr><td>field_5</td><td>' + feature.properties.field_5 + '</td></tr></table>';
 				layer.bindPopup(popupContent);
 			}
 					
